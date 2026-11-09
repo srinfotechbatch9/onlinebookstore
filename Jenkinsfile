@@ -1,26 +1,34 @@
-pipeline {  
-    agent any  
-        stages {  
-       	    stage("git_checkout") {  
-           	    steps {  
-              	    echo "cloning repository" 
-              	    echo "repo cloned successfully"  
-              	    }  
-         	    } 
-				
-				stage("Build") {  
-           	    steps {  
-              	    echo "cloning repository" 
-              	    echo "repo cloned successfully"  
-              	    }  
-         	    } 
-				
-				
-				stage("Test") {  
-           	    steps {  
-              	    echo "cloning repository" 
-              	    echo "repo cloned successfully"  
-              	    }  
-         	    } 
+pipeline{
+    agent any
+    stages{
+        
+        stage('Clone'){
+            
+            steps{
+                
+              git branch: 'feature/2026.10.14', url: 'https://github.com/srinfotechbatch9/onlinebookstore.git'
+            }
         }
+        stage('Build'){
+            
+            steps{
+                bat 'mvn install'
+            }
+        }
+        stage('Test'){
+
+            steps{
+
+                bat 'mvn test'
+            }
+        }
+
+        stage('Published Artifcats'){
+
+            steps{
+
+                archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+            }
+        }
+    }
 }
